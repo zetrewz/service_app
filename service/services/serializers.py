@@ -13,10 +13,10 @@ class SubscriptionSerializer(ModelSerializer):
     plan = PlanSerializer()
     client_name = CharField(source='client.company_name')
     email = CharField(source='client.user.email')
-    price = SerializerMethodField()
-
-    def get_price(self, instance):
-        return instance.price
+    # price = SerializerMethodField()
+    #
+    # def get_price(self, instance):
+    #     return instance.price
 
     class Meta:
         model = Subscription
