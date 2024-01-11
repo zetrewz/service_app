@@ -53,4 +53,11 @@ class Subscription(Model):
     service = ForeignKey(Service, related_name='subscriptions', on_delete=PROTECT)
     plan = ForeignKey(Plan, related_name='subscriptions', on_delete=PROTECT)
     price = PositiveIntegerField(default=0)
-    comment = CharField(max_length=50, default='')
+    comment = CharField(max_length=50, default='', db_index=True)
+
+    def save(self, *args, **kwargs):
+        creating = not bool(self.id)
+        result = super().save(*args, **kwargs)
+        if creating:
+            set_price.delay(self.id)
+        return result
